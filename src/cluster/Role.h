@@ -12,13 +12,14 @@
 
 class Node;
 
+
 class Role {
 public:
 	Role(Node* node);
 	Timer setTimer(float seconds, bool callback);
 	void stop();
 
-	Node* node;	// pointer?
+	Node* node;	// pointer or object?
 	bool running;
 	//Logger& logger;
 };
