@@ -8,6 +8,7 @@
 #ifndef CLUSTER_NODE_H_
 #define CLUSTER_NODE_H_
 
+#include <iostream>	// del later;
 #include <string>
 #include <vector>
 //#include "network/Network.h"
@@ -18,11 +19,11 @@ class Network;
 class Node {
 public:
 	Node(Network* network, std::string address);
-	~Node();	// add later
-	void registerRole(const Role* rolesToAdd);
-	void unregisterRole(const Role* rolesToRemove);
+	~Node(); 	// del later?
+	void registerRole(const Role* role_to_add);
+	void unregisterRole(const Role* role_to_remove);
 	//void send();
-	void receive(std::string sender, std::type_info message);
+	void receive(const std::string sender, const std::type_info message);
 
 	static unsigned int unique_ids;
 	std::string address;

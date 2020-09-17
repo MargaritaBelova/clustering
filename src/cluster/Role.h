@@ -16,10 +16,11 @@ class Node;
 class Role {
 public:
 	Role(Node* node);
+	virtual ~Role();	// del later?
 	Timer setTimer(float seconds, bool callback);
 	void stop();
 
-	Node* node;	// pointer or object?
+	Node* node;
 	bool running;
 	//Logger& logger;
 };

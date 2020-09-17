@@ -7,13 +7,15 @@
 
 #include "Node.h"
 
+#include <iostream> // del later;
+
 unsigned int Node::unique_ids = 0;
 
 Node::Node(Network* network, std::string address){
 	this->network = network;
 	if (address.empty()){
 		++unique_ids;
-		this->address = "N" + std::to_string(unique_ids) + "d";
+		this->address = "N" + std::to_string(unique_ids);
 	} else {
 		this->address = address;
 	};
@@ -22,30 +24,33 @@ Node::Node(Network* network, std::string address){
 }
 
 Node::~Node(){
-
+	std::cout << "Node is destructed" << std::endl;
 }
 
-void Node::registerRole(const Role* rolesToAdd){
-	roles.push_back(rolesToAdd);
+void Node::registerRole(const Role* role_to_add){
+	roles.push_back(role_to_add);
 }
 
-void Node::unregisterRole(const Role* rolesToRemove){
-	// maybe iterate from the begining?
-	auto it = roles.end();
-	while (*it != rolesToRemove and it != roles.begin()){
-		--it;
+void Node::unregisterRole(const Role* role_to_remove){
+	// test it
+	for (auto it = roles.begin(); it != roles.end(); ++it){
+		if (*it == role_to_remove){
+			// release memory here?;
+			roles.erase(it);
+			// del later;
+			std::cout << "Role is unregistered by its node" << std::endl;
+			return;
+		}
+		// Raise Err here;
 	}
-	if (it == roles.begin() && *it != rolesToRemove){
-		return;
-	}
-	roles.erase(it);
+
 }
 
 void Node::receive(std::string sender, std::type_info message){
-	//std::string handler_name = "do_" + message.name() + "s";
+	//std::string handler_name = "do_" + message.name();
 
 	for (auto comp : roles){
-
+		// handle message here;
 	}
 }
 
