@@ -9,19 +9,25 @@
 #include <iostream>
 #include <string>
 
-// del some later;
-#include "cluster/Node.h"
-#include "cluster/Role.h"
+#include "components/Node.h"
+#include "components/Role.h"
+#include "components/Acceptor.h"
+// del those later;
 #include "network/Network.h"
+#include "messages/Message.h"
+#include "messages/Prepare.h"
 
 using namespace std;
 
 
 int main() {
 	Network network;
-	Node node(&network, "test");
-	Role* role = new Role(&node);
-	role->stop();
-	delete role;
+
+	Node node1(&network, "test");
+	//Node node2(&network, "test");
+
+	//Role role(&node1);
+	Acceptor acceptor(&node1);
+	Message* prepare = new Prepare(10);
 	return 0;
 }

@@ -11,6 +11,8 @@
 
 #include "Node.h"
 
+
+
 Role::Role(Node* node) {
 	this->node = node;
 	this->node->registerRole(this);
@@ -19,7 +21,7 @@ Role::Role(Node* node) {
 }
 
 Role::~Role(){
-	std::cout << "Role is destructed" << std::endl;
+	std::cout << "Role " << this << " is destructed" << std::endl;
 }
 
 Timer Role::setTimer(float seconds, bool callback){

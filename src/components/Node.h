@@ -5,16 +5,20 @@
  *      Author: anotherme
  */
 
-#ifndef CLUSTER_NODE_H_
-#define CLUSTER_NODE_H_
+#ifndef COMPONENTS_NODE_H_
+#define COMPONENTS_NODE_H_
 
 #include <iostream>	// del later;
 #include <string>
 #include <vector>
+
 //#include "network/Network.h"
 
 class Role;
 class Network;
+
+// del later;
+class Message;
 
 class Node {
 public:
@@ -22,8 +26,8 @@ public:
 	~Node(); 	// del later?
 	void registerRole(const Role* role_to_add);
 	void unregisterRole(const Role* role_to_remove);
-	//void send();
-	void receive(const std::string sender, const std::type_info message);
+	//void send([const string]);
+	void receive(const std::string sender, Message* message);
 
 	static unsigned int unique_ids;
 	std::string address;
@@ -31,8 +35,8 @@ public:
 private:
 	Network* network;
 	//Logger logger;
-	std::vector<const Role*> roles;	// replace with map?
+	std::vector<const Role*> roles;
 };
 
 
-#endif /* CLUSTER_NODE_H_ */
+#endif /* COMPONENTS_NODE_H_ */
