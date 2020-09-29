@@ -8,6 +8,7 @@
 #ifndef MESSAGES_MESSAGE_H_
 #define MESSAGES_MESSAGE_H_
 
+#include <memory>
 #include <string>
 
 enum Message_id{
@@ -28,12 +29,11 @@ enum Message_id{
 	accepting
 };
 
-class Message{
-public:
+struct Message{
+	virtual ~Message() = 0;
 	virtual Message_id getMsgID() const = 0;
-	//Message_id getMsgID(); 	//test only, del after uncomment previous
 };
 
-
+inline Message::~Message(){}
 
 #endif /* MESSAGES_MESSAGE_H_ */

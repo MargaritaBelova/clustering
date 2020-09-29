@@ -1,0 +1,22 @@
+pass pointer or reference?
+const pointers
+pointers in initialization list
+
+shared_ptr threads
+shared_ptr use_counts?
+
+size_t
+
+string vs const char* name
+
+= nullptr - то же самое, что инициализировать в конструктор;
+int = default_val;
+
+where put const?
+int -> long in constructors; slot -> long
+
+
+
+test:: Node.register/unregister, receive;
+
+заменить в конструкторе x(x) -> x(x_)

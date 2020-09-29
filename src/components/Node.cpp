@@ -12,9 +12,9 @@
 #include "../messages/Message.h"
 #include "Role.h"	// ?
 
-unsigned int Node::unique_ids = 0;
+unsigned long Node::unique_ids = 0;
 
-Node::Node(Network* network, std::string address){
+Node::Node(const std::shared_ptr<Network> network, const std::string address){
 	this->network = network;
 	if (address.empty()){
 		++unique_ids;
@@ -31,17 +31,16 @@ Node::~Node(){
 }
 
 void Node::registerRole(const Role* role_to_add){
+	std::unique_ptr<const Role> role(role_to_add);
+	roles.push_back(std::move(role));
 	std::cout << "Role " << role_to_add << " registered" << std::endl;
-	roles.push_back(role_to_add);
 }
 
-void Node::unregisterRole(const Role* role_to_remove){
-	// test it
+void Node::unregisterRole(const Role* role_to_remove){ // is that ok to pass this pointer to check unique?
 	for (auto it = roles.begin(); it != roles.end(); ++it){
-		if (*it == role_to_remove){
-			// release memory here?;
-			roles.erase(it);
-			// del later;
+		if ((*it).get() == role_to_remove){
+			roles.erase(it); 	// check for deletion later;
+			//del later;
 			std::cout << "Role " << role_to_remove << " is unregistered by its node" << std::endl;
 			return;
 		}
@@ -50,11 +49,11 @@ void Node::unregisterRole(const Role* role_to_remove){
 
 }
 
-void Node::receive(const std::string sender, Message* message){
+void Node::receive(const std::string sender, std::shared_ptr<Message> message){
 	// how to rewrite it?
 	switch (message->getMsgID()){
 		case accepted:
-			for (auto comp : roles){	// roles[:] ?
+			for (auto& comp : roles){	// roles[:] ?
 					if (comp->getRoleName() == commander){
 						std::cout << "Commander->doAccepted\n";
 						//comp->doAccept(...)
@@ -62,7 +61,7 @@ void Node::receive(const std::string sender, Message* message){
 				}
 			break;
 		case accept:
-			for (auto comp : roles){	// roles[:] ?
+			for (auto& comp : roles){
 					if (comp->getRoleName() == acceptor){
 						std::cout << "Acceptor->doAccept\n";
 						//comp->doAccept(...)
@@ -70,7 +69,7 @@ void Node::receive(const std::string sender, Message* message){
 						}
 					break;
 		case decision:
-			for (auto comp : roles){	// roles[:] ?
+			for (auto& comp : roles){
 					if (comp->getRoleName() == replica){
 						std::cout << "Replica->doDecision\n";
 						//comp->doDecision(...)
@@ -78,15 +77,15 @@ void Node::receive(const std::string sender, Message* message){
 				}
 			break;
 		case invoked:
-			for (auto comp : roles){	// roles[:] ?
+			for (auto& comp : roles){
 					if (comp->getRoleName() == requester){
-						std::cout << "requester->doInvoked\n";
+						std::cout << "Requester->doInvoked\n";
 						//comp->doInvoked(...)
 					}
 				}
 			break;
 		case invoke:
-			for (auto comp : roles){	// roles[:] ?
+			for (auto& comp : roles){
 					if (comp->getRoleName() == replica){
 						std::cout << "Replica->doInvoke\n";
 						//comp->doAccept(...)
@@ -94,7 +93,7 @@ void Node::receive(const std::string sender, Message* message){
 				}
 			break;
 		case join:
-			for (auto comp : roles){	// roles[:] ?
+			for (auto& comp : roles){
 					if (comp->getRoleName() == replica || comp->getRoleName() == seed){
 						std::cout << "Replica->Join or Seed->Join\n";
 						//comp->doJoin(...)
@@ -102,7 +101,7 @@ void Node::receive(const std::string sender, Message* message){
 				}
 			break;
 		case active:
-			for (auto comp : roles){	// roles[:] ?
+			for (auto& comp : roles){
 					if (comp->getRoleName() == replica){
 						std::cout << "Replica->doActive\n";
 						//comp->doActive(...)
@@ -110,7 +109,7 @@ void Node::receive(const std::string sender, Message* message){
 				}
 			break;
 		case prepare:
-			for (auto comp : roles){	// roles[:] ?
+			for (auto& comp : roles){
 					if (comp->getRoleName() == acceptor){
 						std::cout << "Acceptor->doPrepare\n";
 						//comp->doAccept(...)
@@ -118,7 +117,7 @@ void Node::receive(const std::string sender, Message* message){
 				}
 			break;
 		case promise:
-			for (auto comp : roles){	// roles[:] ?
+			for (auto& comp : roles){
 					if (comp->getRoleName() == scout){
 						std::cout << "Scout->doPromise\n";
 						//comp->doPromise(...)
@@ -126,7 +125,7 @@ void Node::receive(const std::string sender, Message* message){
 				}
 			break;
 		case propose:
-			for (auto comp : roles){	// roles[:] ?
+			for (auto& comp : roles){
 					if (comp->getRoleName() == leader){
 						std::cout << "Leader->doPropose\n";
 						//comp->doPropose(...)
@@ -134,7 +133,7 @@ void Node::receive(const std::string sender, Message* message){
 				}
 			break;
 		case welcome:
-			for (auto comp : roles){	// roles[:] ?
+			for (auto& comp : roles){
 					if (comp->getRoleName() == bootstrap){
 						std::cout << "Bootstrap->doWelcome\n";
 						//comp->doWelcome(...)
@@ -142,7 +141,7 @@ void Node::receive(const std::string sender, Message* message){
 				}
 			break;
 //		case decided:
-//			for (auto comp : roles){	// roles[:] ?
+//			for (auto comp : roles){
 //					if (comp->getRoleName() == acceptor){
 //						std::cout << "comp->doAccept\n";
 //						//comp->doAccept(...)
@@ -150,7 +149,7 @@ void Node::receive(const std::string sender, Message* message){
 //				}
 			break;
 		case preempted:
-			for (auto comp : roles){	// roles[:] ?
+			for (auto& comp : roles){
 					if (comp->getRoleName() == leader){
 						std::cout << "Leader->doPreempted\n";
 						//comp->doPreempted(...)
@@ -158,7 +157,7 @@ void Node::receive(const std::string sender, Message* message){
 				}
 			break;
 		case adopted:
-			for (auto comp : roles){	// roles[:] ?
+			for (auto& comp : roles){
 					if (comp->getRoleName() == replica || comp->getRoleName() == leader){
 						std::cout << "Replica->doAdopted or Leader->doAdopted\n";
 						//comp->doAdopted(...)
@@ -166,7 +165,7 @@ void Node::receive(const std::string sender, Message* message){
 				}
 			break;
 		case accepting:
-			for (auto comp : roles){	// roles[:] ?
+			for (auto& comp : roles){
 					if (comp->getRoleName() == replica ){
 						std::cout << "replica->doAccept\n";
 						//comp->doAccept(...)

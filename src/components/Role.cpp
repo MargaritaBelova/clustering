@@ -11,17 +11,11 @@
 
 #include "Node.h"
 
-
-
-Role::Role(Node* node) {
+Role::Role(std::weak_ptr<Node> node) {
 	this->node = node;
-	this->node->registerRole(this);
+	this->node.lock()->registerRole(this); // is it safe?
 	running = true;
 	// add logger
-}
-
-Role::~Role(){
-	std::cout << "Role " << this << " is destructed" << std::endl;
 }
 
 Timer Role::setTimer(float seconds, bool callback){
@@ -30,5 +24,5 @@ Timer Role::setTimer(float seconds, bool callback){
 
 void Role::stop(){
 	running = false;
-	node->unregisterRole(this);
+	node.lock()->unregisterRole(this);
 }

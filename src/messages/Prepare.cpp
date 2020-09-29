@@ -7,8 +7,7 @@
 
 #include "Prepare.h"
 
-Prepare::Prepare (unsigned int _slot) : slot(_slot) {
-}
+Prepare::Prepare (const unsigned long ballot_num) : ballot_num(ballot_num) {}
 
 Message_id Prepare::getMsgID() const {
 	return prepare;

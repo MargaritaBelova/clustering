@@ -21,20 +21,4 @@ public:
 	void cancel();
 };
 
-/*
- * class Timer(object):
-
-    def __init__(self, expires, address, callback):
-        self.expires = expires
-        self.address = address
-        self.callback = callback
-        self.cancelled = False
-
-    def __cmp__(self, other):
-        return cmp(self.expires, other.expires)
-
-    def cancel(self):
-        self.cancelled = True
- */
-
 #endif /* NETWORK_TIMER_H_ */

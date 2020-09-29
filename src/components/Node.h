@@ -11,8 +11,7 @@
 #include <iostream>	// del later;
 #include <string>
 #include <vector>
-
-//#include "network/Network.h"
+#include <memory>
 
 class Role;
 class Network;
@@ -22,20 +21,20 @@ class Message;
 
 class Node {
 public:
-	Node(Network* network, std::string address);
+	Node(const std::shared_ptr<Network> network, const std::string address);
 	~Node(); 	// del later?
 	void registerRole(const Role* role_to_add);
 	void unregisterRole(const Role* role_to_remove);
-	//void send([const string]);
-	void receive(const std::string sender, Message* message);
+	//void send([this - const string sender], [string] destinations, message);
+	void receive(const std::string sender, const std::shared_ptr<Message> message);
 
-	static unsigned int unique_ids;
-	std::string address;
+	static unsigned long unique_ids;
+	std::string address; // make const? initialization?
 
 private:
-	Network* network;
+	std::shared_ptr<Network> network;
 	//Logger logger;
-	std::vector<const Role*> roles;
+	std::vector<std::unique_ptr<const Role>> roles;
 };
 
 

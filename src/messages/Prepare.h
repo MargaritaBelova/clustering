@@ -10,13 +10,11 @@
 
 #include "Message.h"
 
-class Prepare : public Message{
-public:
-	Prepare(unsigned int slot);
+struct Prepare : public Message{
+	Prepare(const unsigned long ballot_num);
 	Message_id getMsgID() const;
 
-	const unsigned int slot;
+	const unsigned long ballot_num = 0;
 };
-
 
 #endif /* MESSAGES_PREPARE_H_ */

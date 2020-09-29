@@ -8,6 +8,7 @@
 #ifndef COMPONENTS_ROLE_H_
 #define COMPONENTS_ROLE_H_
 
+#include <memory>
 #include "../network/Timer.h"	// rewrite later to pointer?
 //#include "../messages/Message.h"	// include all the msgs or just one header?
 
@@ -27,18 +28,19 @@ enum Role_id{
 
 class Role {
 public:
-	Role(Node* node);
-	virtual ~Role();	// del later?
+	Role(std::weak_ptr<Node> node);
+	virtual ~Role() = 0;
 	virtual Role_id getRoleName() const = 0;
+
 	Timer setTimer(float seconds, bool callback);
-	Node* node;
+	std::weak_ptr<Node> node;
 
 protected:
 	void stop();
-	bool running;
+	bool running = false;
 	//Logger& logger;
 };
 
-
+inline Role::~Role(){}
 
 #endif /* COMPONENTS_ROLE_H_ */
