@@ -7,7 +7,8 @@
 
 #include "Accepted.h"
 
-Accepted::Accepted(const unsigned long slot, const unsigned long ballot_num) : slot(slot), ballot_num(ballot_num) {}
+Accepted::Accepted(const unsigned long slot_, std::shared_ptr<Ballot> ballot_num_) : \
+		slot(slot_), ballot_num(ballot_num_) {}
 
 Message_id Accepted::getMsgID() const{
 	return accepted;

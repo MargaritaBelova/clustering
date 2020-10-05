@@ -7,8 +7,8 @@
 
 #include "Decision.h"
 
-Decision::Decision(const unsigned long slot, const std::shared_ptr<Proposal> proposal):
-proposal(proposal), slot(slot) {}
+Decision::Decision(const unsigned long slot_, const std::shared_ptr<Proposal> proposal_):
+		slot(slot_), proposal(proposal_) {}
 
 Message_id Decision::getMsgID() const {
 	return decision;

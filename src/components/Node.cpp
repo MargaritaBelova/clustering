@@ -10,17 +10,17 @@
 #include <iostream> // del later;
 
 #include "../messages/Message.h"
-#include "Role.h"	// ?
+#include "Role.h"
+#include "../network/Network.h"
 
 unsigned long Node::unique_ids = 0;
 
-Node::Node(const std::shared_ptr<Network> network, const std::string address){
-	this->network = network;
-	if (address.empty()){
+Node::Node(const std::shared_ptr<Network> network_, const std::string address_): network(network_){
+	if (address_.empty()){
 		++unique_ids;
-		this->address = "N" + std::to_string(unique_ids);
+		address = "N" + std::to_string(unique_ids);
 	} else {
-		this->address = address;
+		address = address_;
 	};
 	// add logger here;
 	// logger.info;
@@ -30,15 +30,18 @@ Node::~Node(){
 	std::cout << "Node is destructed" << std::endl;
 }
 
-void Node::registerRole(const Role* role_to_add){
-	std::unique_ptr<const Role> role(role_to_add);
-	roles.push_back(std::move(role));
-	std::cout << "Role " << role_to_add << " registered" << std::endl;
+
+//is the implementation good?
+void Node::registerRole(std::unique_ptr<Role> role_to_add){
+	roles.push_back(std::move(role_to_add));
+	std::cout << "Role " << roles.back()->get() << " registered" << std::endl;
 }
 
 void Node::unregisterRole(const Role* role_to_remove){ // is that ok to pass this pointer to check unique?
 	for (auto it = roles.begin(); it != roles.end(); ++it){
-		if ((*it).get() == role_to_remove){
+		//del later
+		std::cout << "in Node::unregisterRole\n";
+		if (it->get() == role_to_remove){
 			roles.erase(it); 	// check for deletion later;
 			//del later;
 			std::cout << "Role " << role_to_remove << " is unregistered by its node" << std::endl;
@@ -176,6 +179,7 @@ void Node::receive(const std::string sender, std::shared_ptr<Message> message){
 	}
 }
 
-
-
+void Node::send(std::unique_ptr<destination_list> destinations, std::unique_ptr<Message> message){
+	network->send(address, std::move(destinations), std::move(message));
+}
 

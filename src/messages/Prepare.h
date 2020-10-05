@@ -11,7 +11,7 @@
 #include "Message.h"
 
 struct Prepare : public Message{
-	Prepare(const unsigned long ballot_num);
+	Prepare(const unsigned long ballot_num_);
 	Message_id getMsgID() const;
 
 	const unsigned long ballot_num = 0;

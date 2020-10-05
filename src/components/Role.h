@@ -28,7 +28,7 @@ enum Role_id{
 
 class Role {
 public:
-	Role(std::weak_ptr<Node> node);
+	Role(std::weak_ptr<Node> node_);
 	virtual ~Role() = 0;
 	virtual Role_id getRoleName() const = 0;
 

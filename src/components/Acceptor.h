@@ -8,33 +8,34 @@
 #ifndef COMPONENTS_ACCEPTOR_H_
 #define COMPONENTS_ACCEPTOR_H_
 
-#include <iostream> // del later;
-#include <map>
-//#include <memory> - include or not?
-#include <string>
-#include <tuple>
 #include "Role.h"
 
+#include <iostream> // del later;
+#include <map>
+#include <memory>
+#include <string>
+#include <tuple>
 
-// del implementation later
+
+class Ballot;
 class Proposal;
 
 class Acceptor : public Role {
 public:
-	Acceptor(std::weak_ptr<Node> node);
-	~Acceptor();
+	Acceptor(std::weak_ptr<Node> node_);
+	~Acceptor(); //del later
 	Role_id getRoleName() const; 	// rewrite to static?
-	void doPrepare(const std::string sender, const unsigned long ballot_num);
+	void doPrepare(const std::string sender, std::shared_ptr<Ballot> ballot_num_);
 	// change to weak_ptr?
-	void doAccept(const std::string sender, const unsigned long ballot_num,\
+
+
+	void doAccept(const std::string sender, std::shared_ptr<Ballot> ballot_num_,\
 			const unsigned long slot, std::shared_ptr<Proposal> proposal);
 
 	const std::string name = "Acceptor";
 private:
-	// change to shared_ptr?
-	// slot: tuple(ballot_num, proposal)
-	std::map<unsigned long, std::tuple<unsigned long, std::shared_ptr<Proposal>>> accepted_proposals;
-	unsigned long ballot_num = 0;
+	std::map<unsigned long, std::tuple<std::shared_ptr<Ballot>, std::shared_ptr<Proposal>>> accepted_proposals; // slot: tuple(ballot_num, proposal)
+	std::shared_ptr<Ballot> ballot_num; //add check for nullptr everywhere in comparasion!
 };
 
 

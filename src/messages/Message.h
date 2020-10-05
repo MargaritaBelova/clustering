@@ -8,9 +8,6 @@
 #ifndef MESSAGES_MESSAGE_H_
 #define MESSAGES_MESSAGE_H_
 
-#include <memory>
-#include <string>
-
 enum Message_id{
 	accepted,
 	accept,

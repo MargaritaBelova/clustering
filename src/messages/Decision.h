@@ -10,14 +10,15 @@
 
 #include "Message.h"
 
+#include <memory>
+
 class Proposal;
 
 struct Decision : public Message{
-	Decision(const unsigned long slot, const std::shared_ptr<Proposal> proposal);
+	Decision(const unsigned long slot_, const std::shared_ptr<Proposal> proposal_);
 	Message_id getMsgID() const;
 
-	const unsigned long slot = 0;
-
+	const unsigned long slot;
 	const std::shared_ptr<Proposal> proposal;
 };
 

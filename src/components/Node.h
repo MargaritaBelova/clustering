@@ -13,28 +13,36 @@
 #include <vector>
 #include <memory>
 
-class Role;
+#include "../destinations/DestinationsType.h" // here or put in every class?
+
+//class Role;
 class Network;
 
 // del later;
 class Message;
+class Role;
 
 class Node {
 public:
-	Node(const std::shared_ptr<Network> network, const std::string address);
+	Node(const std::shared_ptr<Network> network_, const std::string address_);
 	~Node(); 	// del later?
-	void registerRole(const Role* role_to_add);
-	void unregisterRole(const Role* role_to_remove);
-	//void send([this - const string sender], [string] destinations, message);
+	// calls network
 	void receive(const std::string sender, const std::shared_ptr<Message> message);
+	void send(std::unique_ptr<destination_list> destinations, std::unique_ptr<Message> message);
 
 	static unsigned long unique_ids;
-	std::string address; // make const? initialization?
 
-private:
+//private: return later!
+	void registerRole(std::unique_ptr<Role> role_to_add);
+	void unregisterRole(const Role* role_to_remove);
+
+
+	std::string address; // make const? initialization?
 	std::shared_ptr<Network> network;
 	//Logger logger;
 	std::vector<std::unique_ptr<const Role>> roles;
+
+	friend Role; // is it ok?
 };
 
 

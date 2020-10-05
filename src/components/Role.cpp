@@ -11,9 +11,10 @@
 
 #include "Node.h"
 
-Role::Role(std::weak_ptr<Node> node) {
-	this->node = node;
-	this->node.lock()->registerRole(this); // is it safe?
+Role::Role(std::weak_ptr<Node> node_): node(node_){
+	// moved to corresponding heirs
+	/*std::unique_ptr<Role> uptr_from_this(this);	//is it safe?
+	node.lock()->registerRole(std::move(uptr_from_this)); */
 	running = true;
 	// add logger
 }
