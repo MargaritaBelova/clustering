@@ -10,11 +10,12 @@
 
 #include <memory>
 #include "../network/Timer.h"	// rewrite later to pointer?
-//#include "../messages/Message.h"	// include all the msgs or just one header?
+
+//del later
+#include <iostream>
 
 class Node;
 
-//here or in separate file?
 enum Role_id{
 	acceptor,
 	replica,
@@ -32,10 +33,9 @@ public:
 	virtual ~Role() = 0;
 	virtual Role_id getRoleName() const = 0;
 
-	Timer setTimer(float seconds, bool callback);
+	Timer setTimer(float seconds, bool callback); //is it ok for time be float?
 	std::weak_ptr<Node> node;
-
-protected:
+private:
 	void stop();
 	bool running = false;
 	//Logger& logger;

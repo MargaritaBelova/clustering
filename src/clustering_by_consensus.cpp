@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <string>
+#include <tuple>
 
 #include "components/Node.h"
 #include "components/Acceptor.h"
@@ -45,25 +46,22 @@ public:
 int main() {
 	auto network = make_shared<Network>();
 
-	shared_ptr<Node> sp1 = make_shared<Node>(network, "test");
-	//shared_ptr<Node> sp2 = make_shared<Node>(network, "test");
+	shared_ptr<Node> sp1 = make_shared<Node>(network, "address1");
+	//shared_ptr<Node> sp2 = make_shared<Node>(network, "address12");
 
 	weak_ptr<Node> wp1 = sp1;
 	//weak_ptr<Node> wp2 = sp2;
 	//auto prepare = make_shared<Prepare>(10);
 	//sp1->receive("sender", prepare);
 
-	shared_ptr<Role> acc1 = make_shared<Acceptor>(wp1);
-	/*
-	auto bal0 = make_shared<Ballot>(0, "leader");
-	auto proposal = make_shared<Proposal>("caller", 0, 0);
-	shared_ptr<Acceptor> acc1_casted = dynamic_pointer_cast<Acceptor>(acc1);
-	if (acc1_casted){
-		acc1_casted->doAccept("sender", bal0, 0, proposal);
-	}
-	*/
-	//acc1->stop();
-	//sp1->unregisterRole(acc1.get());
+	Acceptor* acc1 = new Acceptor(wp1);
+	Acceptor* acc2 = new Acceptor(wp1);
 
+	auto bal0 = make_shared<Ballot>(0, "leader");
+	auto proposal = make_shared<Proposal>("caller", 0, 10);
+
+	acc1->doAccept("sender", bal0, 0, proposal);
+
+	acc2->doPrepare("sender", bal0);
 	return 0;
 }

@@ -7,7 +7,7 @@
 
 #include "Prepare.h"
 
-Prepare::Prepare (const unsigned long ballot_num_) : ballot_num(ballot_num_) {}
+Prepare::Prepare (std::shared_ptr<Ballot> ballot_num_) : ballot_num(ballot_num_) {}
 
 Message_id Prepare::getMsgID() const {
 	return prepare;

@@ -10,11 +10,15 @@
 
 #include "Message.h"
 
+#include <memory>
+
+class Ballot;
+
 struct Prepare : public Message{
-	Prepare(const unsigned long ballot_num_);
+	Prepare(std::shared_ptr<Ballot> ballot_num_);
 	Message_id getMsgID() const;
 
-	const unsigned long ballot_num = 0;
+	std::shared_ptr<Ballot> ballot_num;
 };
 
 #endif /* MESSAGES_PREPARE_H_ */

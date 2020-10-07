@@ -27,33 +27,32 @@ Node::Node(const std::shared_ptr<Network> network_, const std::string address_):
 }
 
 Node::~Node(){
-	std::cout << "Node is destructed" << std::endl;
+	std::cout << "Node " << address << " is destructed" << std::endl;
 }
-
 
 //is the implementation good?
 void Node::registerRole(std::unique_ptr<Role> role_to_add){
 	roles.push_back(std::move(role_to_add));
-	std::cout << "Role " << roles.back()->get() << " registered" << std::endl;
+	// del later
+	std::cout << "Role " << roles.back().get() << " registered" << std::endl;
 }
 
-void Node::unregisterRole(const Role* role_to_remove){ // is that ok to pass this pointer to check unique?
+void Node::unregisterRole(const Role* role_to_remove){ // is that ok to pass this pointer to check unique one?
 	for (auto it = roles.begin(); it != roles.end(); ++it){
 		//del later
 		std::cout << "in Node::unregisterRole\n";
 		if (it->get() == role_to_remove){
-			roles.erase(it); 	// check for deletion later;
+			roles.erase(it);
 			//del later;
 			std::cout << "Role " << role_to_remove << " is unregistered by its node" << std::endl;
 			return;
 		}
 		// Raise Err here;
 	}
-
 }
 
 void Node::receive(const std::string sender, std::shared_ptr<Message> message){
-	// how to rewrite it?
+	// how to rewrite it? received message cannot be a pointer!
 	switch (message->getMsgID()){
 		case accepted:
 			for (auto& comp : roles){	// roles[:] ?

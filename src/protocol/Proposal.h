@@ -16,7 +16,6 @@ struct Proposal{
 	const std::string caller;
 	const unsigned long client_id;
 	const unsigned long input;
-
 };
 
 

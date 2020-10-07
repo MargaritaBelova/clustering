@@ -11,7 +11,7 @@
 #include "Role.h"
 
 #include <iostream> // del later;
-#include <map>
+#include <unordered_map>
 #include <memory>
 #include <string>
 #include <tuple>
@@ -28,13 +28,12 @@ public:
 	void doPrepare(const std::string sender, std::shared_ptr<Ballot> ballot_num_);
 	// change to weak_ptr?
 
-
 	void doAccept(const std::string sender, std::shared_ptr<Ballot> ballot_num_,\
-			const unsigned long slot, std::shared_ptr<Proposal> proposal);
+	const unsigned long slot, std::shared_ptr<Proposal> proposal);
 
-	const std::string name = "Acceptor";
-private:
-	std::map<unsigned long, std::tuple<std::shared_ptr<Ballot>, std::shared_ptr<Proposal>>> accepted_proposals; // slot: tuple(ballot_num, proposal)
+//private: get back
+	//change to vector instead? or usual map?
+	std::unordered_map<unsigned long, std::tuple<std::shared_ptr<Ballot>, std::shared_ptr<Proposal>>> accepted_proposals; // slot: tuple(ballot_num, proposal)
 	std::shared_ptr<Ballot> ballot_num; //add check for nullptr everywhere in comparasion!
 };
 

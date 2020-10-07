@@ -21,7 +21,7 @@ struct Accept : public Message{
 
 	const std::shared_ptr<Proposal> proposal;
 	const std::shared_ptr<Ballot> ballot_num;
-	const unsigned long slot = 0;
+	const unsigned long slot;
 };
 
 #endif /* MESSAGES_ACCEPT_H_ */

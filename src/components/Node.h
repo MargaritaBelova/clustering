@@ -26,21 +26,20 @@ class Node {
 public:
 	Node(const std::shared_ptr<Network> network_, const std::string address_);
 	~Node(); 	// del later?
-	// calls network
+	// HOW TO REWRITE IT? received message cannot be a pointer!
 	void receive(const std::string sender, const std::shared_ptr<Message> message);
 	void send(std::unique_ptr<destination_list> destinations, std::unique_ptr<Message> message);
 
 	static unsigned long unique_ids;
 
-//private: return later!
+private:
 	void registerRole(std::unique_ptr<Role> role_to_add);
 	void unregisterRole(const Role* role_to_remove);
-
 
 	std::string address; // make const? initialization?
 	std::shared_ptr<Network> network;
 	//Logger logger;
-	std::vector<std::unique_ptr<const Role>> roles;
+	std::vector<std::unique_ptr<Role>> roles;
 
 	friend Role; // is it ok?
 };
