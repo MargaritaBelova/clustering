@@ -18,7 +18,7 @@ struct Accepted : public Message{
 	Accepted(const unsigned long slot_, std::shared_ptr<Ballot> ballot_num_);
 	Message_id getMsgID() const;
 
-	const unsigned long slot = 0;
+	const unsigned long slot;
 	std::shared_ptr<Ballot> ballot_num;
 };
 

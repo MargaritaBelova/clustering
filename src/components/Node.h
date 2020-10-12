@@ -26,9 +26,15 @@ class Node {
 public:
 	Node(const std::shared_ptr<Network> network_, const std::string address_);
 	~Node(); 	// del later?
-	// HOW TO REWRITE IT? received message cannot be a pointer!
-	void receive(const std::string sender, const std::shared_ptr<Message> message);
+	// REWRITE IT! received message cannot be a pointer! should accept copies
+	void receive(const std::string sender, std::shared_ptr<Message> message);
+
+	void send(std::string&& destination, std::unique_ptr<Message> message); // is it necessary or not?
+	void send(const std::string& destination, std::unique_ptr<Message> message);
+	// change send argument to std::move(std::string) instead of unique_ptr<std::string>?
+	//void send(std::unique_ptr<std::string> destination, std::unique_ptr<Message> message);
 	void send(std::unique_ptr<destination_list> destinations, std::unique_ptr<Message> message);
+	const std::string& getAddress();
 
 	static unsigned long unique_ids;
 
@@ -43,6 +49,11 @@ private:
 
 	friend Role; // is it ok?
 };
+
+// should it be here, in header file?
+inline const std::string& Node::getAddress(){
+	return address;
+}
 
 
 #endif /* COMPONENTS_NODE_H_ */

@@ -34,10 +34,10 @@ Node::~Node(){
 void Node::registerRole(std::unique_ptr<Role> role_to_add){
 	roles.push_back(std::move(role_to_add));
 	// del later
-	std::cout << "Role " << roles.back().get() << " registered" << std::endl;
+	std::cout << "Role " << roles.back().get() << " registered; ";
 }
 
-void Node::unregisterRole(const Role* role_to_remove){ // is that ok to pass this pointer to check unique one?
+void Node::unregisterRole(const Role* role_to_remove){
 	for (auto it = roles.begin(); it != roles.end(); ++it){
 		//del later
 		std::cout << "in Node::unregisterRole\n";
@@ -177,6 +177,21 @@ void Node::receive(const std::string sender, std::shared_ptr<Message> message){
 
 	}
 }
+
+void Node::send(std::string&& destination, std::unique_ptr<Message> message){
+	std::cout << "Node::send rvalue reference called\n";
+	network->send(address, std::move(destination), std::move(message));
+}
+
+void Node::send(const std::string& destination, std::unique_ptr<Message> message){
+	std::cout << "Node::send copy called\n";
+	network->send(address, destination, std::move(message));
+}
+
+/*
+void Node::send(std::unique_ptr<std::string> destination, std::unique_ptr<Message> message){
+	network->send(address, std::move(destination), std::move(message));
+}*/
 
 void Node::send(std::unique_ptr<destination_list> destinations, std::unique_ptr<Message> message){
 	network->send(address, std::move(destinations), std::move(message));

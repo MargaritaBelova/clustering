@@ -11,8 +11,9 @@
 
 #include "../messages/Accepted.h"
 #include "../messages/Accepting.h"
+#include "../messages/Promise.h"
+
 #include "../protocol/Ballot.h"
-#include "../destinations/DestinationsType.h"
 #include "Node.h"
 
 
@@ -30,8 +31,12 @@ Role_id Acceptor::getRoleName() const {
 	return acceptor;
 }
 
+void Acceptor::callback(){
+	std::cout << "it shouldn't be called\n"; 	//del later
+}
+
 //check for bad keys and initial values; check for nullptr which created after construction
-void Acceptor::doAccept(const std::string sender, std::shared_ptr<Ballot> ballot_num_,\
+void Acceptor::doAccept(std::string sender, std::shared_ptr<Ballot> ballot_num_,\
 		const unsigned long slot, std::shared_ptr<Proposal> proposal){
 
 	assert(ballot_num); // del later;
@@ -55,19 +60,22 @@ void Acceptor::doAccept(const std::string sender, std::shared_ptr<Ballot> ballot
 	std::cout << "doAccept: " << sender << " " << ballot_num->n << std::endl;
 
 	auto accepted_msg = std::make_unique<Accepted>(slot, ballot_num);
-	//rewrite to inline function as it is used throughout project?
-	auto destinations_ptr = std::make_unique<destination_list>();
-	destinations_ptr->push_back(sender);
-	node.lock()->send(std::move(destinations_ptr), std::move(accepted_msg)); // move(uptr) because node and acceptor are on the same local node;
+	node.lock()->send(std::move(sender), std::move(accepted_msg));
+	//auto destination_ptr = std::make_unique<std::string>(sender);
+	//node.lock()->send(std::move(destination_ptr), std::move(accepted_msg)); // move(uptr) because node and acceptor are on the same local node;
 }
 
-void Acceptor::doPrepare(const std::string sender, std::shared_ptr<Ballot> ballot_num_){
+// not finished yet!
+void Acceptor::doPrepare(std::string sender, std::shared_ptr<Ballot> ballot_num_){
 	// add check for nullptr in cmp everywhere!
-	if (ballot_num_->n > ballot_num->n){
+	if (ballot_num_->n > ballot_num->n){ // is it safe for 0 ballot_num or should be >=?
 		ballot_num = ballot_num_;
+		auto accepting_msg = std::make_unique<Accepting>(sender);
+		node.lock()->send(node.lock()->getAddress(), std::move(accepting_msg)); // может, полностью расписать? или std::move тоже будет?
 	}
-	auto destinations_ptr = std::make_unique<destination_list>();
-	destinations_ptr->push_back(sender);
-	auto accepting_msg = std::make_unique<Accepting>(sender);
-	node.lock()->send(std::move(destinations_ptr), std::move(accepting_msg));
+	// оно че серьезно весь accepted_proposal каждый раз будет пересылать?!
+	// complete Promise() message later
+	auto promise_msg = std::make_unique<Promise>(ballot_num);
+	node.lock()->send(std::move(sender), std::move(promise_msg));
+
 }

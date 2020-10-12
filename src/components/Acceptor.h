@@ -25,13 +25,13 @@ public:
 	Acceptor(std::weak_ptr<Node> node_);
 	~Acceptor(); //del later
 	Role_id getRoleName() const; 	// rewrite to static?
-	void doPrepare(const std::string sender, std::shared_ptr<Ballot> ballot_num_);
-	// change to weak_ptr?
+	void callback();
+	void doPrepare(std::string sender, std::shared_ptr<Ballot> ballot_num_);
 
-	void doAccept(const std::string sender, std::shared_ptr<Ballot> ballot_num_,\
+	void doAccept(std::string sender, std::shared_ptr<Ballot> ballot_num_,\
 	const unsigned long slot, std::shared_ptr<Proposal> proposal);
 
-//private: get back
+private:
 	//change to vector instead? or usual map?
 	std::unordered_map<unsigned long, std::tuple<std::shared_ptr<Ballot>, std::shared_ptr<Proposal>>> accepted_proposals; // slot: tuple(ballot_num, proposal)
 	std::shared_ptr<Ballot> ballot_num; //add check for nullptr everywhere in comparasion!

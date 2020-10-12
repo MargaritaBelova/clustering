@@ -10,15 +10,22 @@
 
 #include <string>
 
+class Role;
+
 class Timer {
 public:
-	Timer(float expires, std::string address, bool callback);
-	// written instead of
-	//def __cmp__(self, other):
-    //return cmp(self.expires, other.expires)
-	// maybe replace with operator overload?
-	char cmp (const Timer& timer2) const;
+	Timer( float expires_, std::string address_, void (Role::*fpcallback_)() );
 	void cancel();
+
+	float expires;
+	const std::string address;
+
+private:
+	short cmp(const Timer& timer2) const;	// rewrite to operator? //change to char?
+	bool cancelled;
+public:	// make private again
+	void (Role::*fpcallback)();
+
 };
 
 #endif /* NETWORK_TIMER_H_ */

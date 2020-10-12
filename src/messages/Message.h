@@ -9,21 +9,21 @@
 #define MESSAGES_MESSAGE_H_
 
 enum Message_id{
-	accepted,
-	accept,
-	decision,
-	invoked,
-	invoke,
-	join,
-	active,
-	prepare,
-	promise,
-	propose,
-	welcome,
-	decided,
-	preempted,
-	adopted,
-	accepting
+	accepted, //0
+	accept, // 1
+	decision, // 2
+	invoked, // 3
+	invoke, // 4
+	join, // 5
+	active, // 6
+	prepare, // 7
+	promise, // 8
+	propose, // 9
+	welcome, // 10
+	decided, // 11
+	preempted, // 12
+	adopted, // 13
+	accepting // 14
 };
 
 struct Message{

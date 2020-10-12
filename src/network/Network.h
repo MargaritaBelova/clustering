@@ -18,8 +18,16 @@ class Message;
 class Network{
 public:
 	Network();
-	void send(const std::string sender, std::unique_ptr<destination_list> destinations,\
-			const std::unique_ptr<Message> message); // add const for std::unique_ptr<Message> message for node?
+	// will it be ok or should we use copy for sender instead const reference?;
+	void send(const std::string& sender, std::string&& destination, std::unique_ptr<Message> message);
+	void send(const std::string& sender, const std::string& destination, std::unique_ptr<Message> message);
+	/*
+	void send(const std::string sender, std::unique_ptr<std::string> destination,\
+				std::unique_ptr<Message> message); // add const for std::unique_ptr<Message> message for node?
+*/
+	// will it be ok or should we use copy for sender instead const reference?; is it ok to use only move semantics here?
+	void send(const std::string& sender, std::unique_ptr<destination_list> destinations, std::unique_ptr<Message> message);
+
 
 };
 

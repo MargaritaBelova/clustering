@@ -5,18 +5,13 @@
  *      Author: anotherme
  */
 
-
-/*
-
 #include "Message.h"
 
 struct Invoked : public Message{
-	Invoked(client_id, output);
+	Invoked(const unsigned long client_id_, const long output_);
 	Message_id getMsgID() const;
 
-	const unsigned long slot;
-
-	const std::shared_ptr<Proposal> proposal;
+	const unsigned long client_id;
+	const long output;
 };
 
-*/
