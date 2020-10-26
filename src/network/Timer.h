@@ -14,18 +14,24 @@ class Role;
 
 class Timer {
 public:
-	Timer( float expires_, std::string address_, void (Role::*fpcallback_)() );
+	//maybe by value?
+	Timer( float expires_, std::string& address_, Role* creator_, void (Role::*fpcallback_)() );
 	void cancel();
 
 	float expires;
-	const std::string address;
-
-private:
-	short cmp(const Timer& timer2) const;	// rewrite to operator? //change to char?
+	std::string address;
 	bool cancelled;
-public:	// make private again
-	void (Role::*fpcallback)();
 
+	Role* creator;
+	void (Role::*fpcallback)();
 };
+
+
+// should it be in this h and .cpp file or somewhere else?
+class CompareTimers{
+public:
+	bool operator() (const Timer& timer1, const Timer& timer2) const;
+};
+
 
 #endif /* NETWORK_TIMER_H_ */

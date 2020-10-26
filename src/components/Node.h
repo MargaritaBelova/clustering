@@ -14,9 +14,9 @@
 #include <memory>
 
 #include "../destinations/DestinationsType.h" // here or put in every class?
+#include "../network/Network.h"
 
 //class Role;
-class Network;
 
 // del later;
 class Message;
@@ -24,7 +24,7 @@ class Role;
 
 class Node {
 public:
-	Node(const std::shared_ptr<Network> network_, const std::string address_);
+	Node(const Network& network_, const std::string address_);
 	~Node(); 	// del later?
 	// REWRITE IT! received message cannot be a pointer! should accept copies
 	void receive(const std::string sender, std::shared_ptr<Message> message);
@@ -43,7 +43,7 @@ private:
 	void unregisterRole(const Role* role_to_remove);
 
 	std::string address; // make const? initialization?
-	std::shared_ptr<Network> network;
+	Network network;	//std::shared_ptr<Network> network;
 	//Logger logger;
 	std::vector<std::unique_ptr<Role>> roles;
 

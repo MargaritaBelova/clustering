@@ -8,7 +8,7 @@
 
 #include <iostream>
 #include <string>
-#include <tuple>
+//#include <tuple>
 //#include <mutex>
 
 #include "components/Node.h"
@@ -21,8 +21,6 @@
 #include "protocol/Ballot.h"
 #include "protocol/Proposal.h"
 #include "network/Timer.h"
-
-
 
 using namespace std;
 
@@ -47,9 +45,9 @@ public:
 
 
 int main() {
-	auto network = make_shared<Network>();
+	Network network(11.11);
 
-	shared_ptr<Node> sp1 = make_shared<Node>(network, "node1");
+	shared_ptr<Node> sp1 = network.newNode("node1");
 	//shared_ptr<Node> sp2 = make_shared<Node>(network, "address12");
 
 	weak_ptr<Node> wp1 = sp1;
@@ -57,25 +55,25 @@ int main() {
 	//auto prepare = make_shared<Prepare>(10);
 	//sp1->receive("sender", prepare);
 
-	//Acceptor* acc1 = new Acceptor(wp1);
-	Acceptor* acc2 = new Acceptor(wp1);
+	Acceptor* acc1 = new Acceptor(wp1);
+	//Acceptor* acc2 = new Acceptor(wp1);
 
-	auto bal0 = make_shared<Ballot>(0, "leader");
-	auto proposal = make_shared<Proposal>("caller", 0, 10);
+	//auto bal0 = make_shared<Ballot>(0, "leader");
+	//auto proposal = make_shared<Proposal>("caller", 0, 10);
 	//acc1->doAccept("sender", bal0, 0, proposal);
 
-	auto bal1 = make_shared<Ballot>(1, "leader");
-	acc2->doPrepare("sender", bal1);
+	//auto bal1 = make_shared<Ballot>(1, "leader");
+	//acc1->doPrepare("sender", bal1);
 
 	Requester* requester = new Requester(wp1, 11);
-	void (Role::*fprole)() = &Role::callback;
+	Requester* requester2 = new Requester(wp1, 111);
+	//void (Role::*fprole)() = &Role::callback;
 	//(requester->*fprole)();
 
-	Timer timer1(10.0, "timeraddress", fprole);
-	(requester->*(timer1.fpcallback))();
+	network.setTimer("", 10, requester, &Role::callback);
+	network.setTimer("node1", 5, acc1, &Role::callback);
+	network.stop();
 
-	Timer timer2(11.0, "timeraddress", fprole);
-
-	cout << "cmp result" << timer1.cmp(timer2) << endl;
+	network.run();
 	return 0;
 }

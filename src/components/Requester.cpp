@@ -18,7 +18,7 @@ unsigned long Requester::client_ids = 100000;
 Requester::Requester(std::weak_ptr<Node> node_, unsigned long int n_) : Role(node_), n(n_) {}
 
 Requester::~Requester(){
-	std::cout << "Requester destructed\n";
+	std::cout << this << " Requester destructed\n";
 }
 
 Role_id Requester::getRoleName() const {

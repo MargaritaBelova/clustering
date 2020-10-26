@@ -32,7 +32,7 @@ Role_id Acceptor::getRoleName() const {
 }
 
 void Acceptor::callback(){
-	std::cout << "it shouldn't be called\n"; 	//del later
+	std::cout << "Acceptor callback: it shouldn't be called\n"; 	//del later
 }
 
 //check for bad keys and initial values; check for nullptr which created after construction

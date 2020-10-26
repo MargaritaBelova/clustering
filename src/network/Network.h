@@ -9,26 +9,48 @@
 #define NETWORK_NETWORK_H_
 
 #include <memory>
+#include <queue>
+#include <random>
 #include <string>
+#include <unordered_map>
+#include <vector>
 
 #include "../destinations/DestinationsType.h"
+#include "Timer.h"
 
 class Message;
+class Node;
+class Role;
 
 class Network{
 public:
-	Network();
-	// will it be ok or should we use copy for sender instead const reference?;
-	void send(const std::string& sender, std::string&& destination, std::unique_ptr<Message> message);
-	void send(const std::string& sender, const std::string& destination, std::unique_ptr<Message> message);
-	/*
-	void send(const std::string sender, std::unique_ptr<std::string> destination,\
-				std::unique_ptr<Message> message); // add const for std::unique_ptr<Message> message for node?
-*/
+	Network(float seed);
+	// add logger to every send method
+	void send(const Node& sender, std::string&& destination, std::unique_ptr<Message> message);
+	void send(const Node& sender, const std::string& destination, std::unique_ptr<Message> message);
 	// will it be ok or should we use copy for sender instead const reference?; is it ok to use only move semantics here?
-	void send(const std::string& sender, std::unique_ptr<destination_list> destinations, std::unique_ptr<Message> message);
+	void send(const Node& sender, std::unique_ptr<destination_list> destinations, std::unique_ptr<Message> message);
 
+	std::shared_ptr<Node> newNode(std::string address="");
+	// maybe rewrite timers at Roles to weak ptrs?
+	Timer* const setTimer(std::string address, float seconds, Role* creator, void (Role::*fpcallback)()); //move to private? //weak_ptr or shared
 
+	void run();	// adapt it
+	void stop();
+
+private:
+	const float kPropDelay = 0.03;
+	const float kPropJitter = 0.02;
+	const float kDropProb = 0.05;
+
+	void sendto(const std::string& dest, std::unique_ptr<Message> message);
+
+	std::unordered_map<std::string, std::weak_ptr<Node>> nodes; // rewrite to shared_ptr?
+	std::priority_queue<Timer, std::vector<Timer>, CompareTimers> timers;
+
+	std::default_random_engine generator;
+
+	float now;
 };
 
 

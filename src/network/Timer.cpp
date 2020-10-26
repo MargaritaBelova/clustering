@@ -7,23 +7,20 @@
 
 #include "Timer.h"
 
-Timer::Timer( float expires_, std::string address_, void (Role::*fpcallback_)() ) : expires(expires_),
-	address(address_), fpcallback(fpcallback_) {
+Timer::Timer( float expires_, std::string& address_, Role* creator_, void (Role::*fpcallback_)() ) : expires(expires_),
+	address(address_), creator(creator_), fpcallback(fpcallback_) {
 	cancelled = false;
 }
 
-short Timer::cmp(const Timer& timer2) const{
-	if (expires < timer2.expires) {
-		return -1;
-	} else if (expires > timer2.expires) {
-		return 1;
-	}
-	return 0;
-}
 
 void Timer::cancel(){
 	cancelled = true;
 }
 
 
-
+// check later
+bool CompareTimers::operator() (const Timer& timer1, const Timer& timer2) const{
+	if (timer1.expires > timer2.expires) {
+		return true;
+	} else return false;
+}

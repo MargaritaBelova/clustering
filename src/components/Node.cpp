@@ -15,7 +15,7 @@
 
 unsigned long Node::unique_ids = 0;
 
-Node::Node(const std::shared_ptr<Network> network_, const std::string address_): network(network_){
+Node::Node(const Network& network_, const std::string address_): network(network_){
 	if (address_.empty()){
 		++unique_ids;
 		address = "N" + std::to_string(unique_ids);
@@ -34,7 +34,7 @@ Node::~Node(){
 void Node::registerRole(std::unique_ptr<Role> role_to_add){
 	roles.push_back(std::move(role_to_add));
 	// del later
-	std::cout << "Role " << roles.back().get() << " registered; ";
+	std::cout << "Role " << roles.back().get() << " registered;\n";
 }
 
 void Node::unregisterRole(const Role* role_to_remove){
@@ -51,7 +51,7 @@ void Node::unregisterRole(const Role* role_to_remove){
 	}
 }
 
-void Node::receive(const std::string sender, std::shared_ptr<Message> message){
+void Node::receive(const std::string sender_address, std::shared_ptr<Message> message){
 	// how to rewrite it? received message cannot be a pointer!
 	switch (message->getMsgID()){
 		case accepted:
@@ -174,26 +174,20 @@ void Node::receive(const std::string sender, std::shared_ptr<Message> message){
 					}
 				}
 			break;
-
 	}
 }
 
 void Node::send(std::string&& destination, std::unique_ptr<Message> message){
 	std::cout << "Node::send rvalue reference called\n";
-	network->send(address, std::move(destination), std::move(message));
+	network.send(*this, std::move(destination), std::move(message));
 }
 
 void Node::send(const std::string& destination, std::unique_ptr<Message> message){
 	std::cout << "Node::send copy called\n";
-	network->send(address, destination, std::move(message));
+	network.send(*this, destination, std::move(message));
 }
 
-/*
-void Node::send(std::unique_ptr<std::string> destination, std::unique_ptr<Message> message){
-	network->send(address, std::move(destination), std::move(message));
-}*/
-
 void Node::send(std::unique_ptr<destination_list> destinations, std::unique_ptr<Message> message){
-	network->send(address, std::move(destinations), std::move(message));
+	network.send(*this, std::move(destinations), std::move(message));
 }
 
