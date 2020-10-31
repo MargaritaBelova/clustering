@@ -20,11 +20,12 @@
 #include "messages/Accept.h"
 #include "protocol/Ballot.h"
 #include "protocol/Proposal.h"
-#include "network/Timer.h"
+#include "network/ReceiveTimer.h"
+#include "network/RoleTimer.h"
 
 using namespace std;
 
-class Role;
+//class Role;
 class Message;
 
 class Pointee{
@@ -52,13 +53,9 @@ int main() {
 
 	weak_ptr<Node> wp1 = sp1;
 	//weak_ptr<Node> wp2 = sp2;
-	//auto prepare = make_shared<Prepare>(10);
-	//sp1->receive("sender", prepare);
-
 	Acceptor* acc1 = new Acceptor(wp1);
 	//Acceptor* acc2 = new Acceptor(wp1);
 
-	//auto bal0 = make_shared<Ballot>(0, "leader");
 	//auto proposal = make_shared<Proposal>("caller", 0, 10);
 	//acc1->doAccept("sender", bal0, 0, proposal);
 
@@ -66,14 +63,18 @@ int main() {
 	//acc1->doPrepare("sender", bal1);
 
 	Requester* requester = new Requester(wp1, 11);
-	Requester* requester2 = new Requester(wp1, 111);
+	//Requester* requester2 = new Requester(wp1, 111);
 	//void (Role::*fprole)() = &Role::callback;
 	//(requester->*fprole)();
 
-	network.setTimer("", 10, requester, &Role::callback);
-	network.setTimer("node1", 5, acc1, &Role::callback);
-	network.stop();
+	string address = "node1";
+	network.setRoleTimer(address, 5, acc1);
+
+	auto bal0 = make_shared<Ballot>(0, "leader");
+	std::unique_ptr<Message> prepare = make_unique<Prepare>(bal0);
+	network.setReceiveTimer(address, 15, sp1.get(), std::move(prepare));
 
 	network.run();
+	network.stop();
 	return 0;
 }

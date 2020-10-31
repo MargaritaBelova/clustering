@@ -51,7 +51,7 @@ void Node::unregisterRole(const Role* role_to_remove){
 	}
 }
 
-void Node::receive(const std::string sender_address, std::shared_ptr<Message> message){
+void Node::receive(const std::string sender_address, std::unique_ptr<Message> message){
 	// how to rewrite it? received message cannot be a pointer!
 	switch (message->getMsgID()){
 		case accepted:
@@ -142,7 +142,7 @@ void Node::receive(const std::string sender_address, std::shared_ptr<Message> me
 					}
 				}
 			break;
-//		case decided:
+//		case decided:	//почему не используется?!
 //			for (auto comp : roles){
 //					if (comp->getRoleName() == acceptor){
 //						std::cout << "comp->doAccept\n";

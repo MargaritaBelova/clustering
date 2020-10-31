@@ -18,7 +18,7 @@ Role::Role(std::weak_ptr<Node> node_): node(node_){
 	// add logger
 }
 
-Timer Role::setTimer(float seconds, bool callback){
+Timer* Role::setTimer(float seconds, bool callback){
 	//set timer for node.network here;
 }
 

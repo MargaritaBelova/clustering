@@ -16,11 +16,15 @@
 #include <vector>
 
 #include "../destinations/DestinationsType.h"
-#include "Timer.h"
+#include "Timer.h"	//заменить на forward declaretion?
 
 class Message;
 class Node;
 class Role;
+
+//class Timer;
+class ReceiveTimer;
+class RoleTimer;
 
 class Network{
 public:
@@ -33,7 +37,8 @@ public:
 
 	std::shared_ptr<Node> newNode(std::string address="");
 	// maybe rewrite timers at Roles to weak ptrs?
-	Timer* const setTimer(std::string address, float seconds, Role* creator, void (Role::*fpcallback)()); //move to private? //weak_ptr or shared
+	RoleTimer* setRoleTimer(std::string& address, float seconds, Role* creator);
+	ReceiveTimer* setReceiveTimer(std::string& dest_address, float seconds, Node* receiver, std::unique_ptr<Message> message);
 
 	void run();	// adapt it
 	void stop();
@@ -43,10 +48,10 @@ private:
 	const float kPropJitter = 0.02;
 	const float kDropProb = 0.05;
 
-	void sendto(const std::string& dest, std::unique_ptr<Message> message);
+	void sendto(Node& sender, const std::string& dest, std::unique_ptr<Message> message);
 
 	std::unordered_map<std::string, std::weak_ptr<Node>> nodes; // rewrite to shared_ptr?
-	std::priority_queue<Timer, std::vector<Timer>, CompareTimers> timers;
+	std::priority_queue<Timer*, std::vector<Timer*>, CompareTimers> timers;
 
 	std::default_random_engine generator;
 

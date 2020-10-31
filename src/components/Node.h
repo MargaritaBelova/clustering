@@ -25,9 +25,9 @@ class Role;
 class Node {
 public:
 	Node(const Network& network_, const std::string address_);
-	~Node(); 	// del later?
+	~Node(); 	// del later
 	// REWRITE IT! received message cannot be a pointer! should accept copies
-	void receive(const std::string sender, std::shared_ptr<Message> message);
+	void receive(const std::string sender, std::unique_ptr<Message> message);
 
 	void send(std::string&& destination, std::unique_ptr<Message> message); // is it necessary or not?
 	void send(const std::string& destination, std::unique_ptr<Message> message);

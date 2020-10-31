@@ -34,9 +34,10 @@ public:
 	virtual ~Role() = 0;
 	virtual Role_id getRoleName() const = 0;
 
-	virtual void callback() = 0; // del implementation and make pure virtual?
+	virtual void callback() = 0;
 
-	Timer setTimer(float seconds, bool callback); //is it ok for time be float?
+	// поменять тип на Role Timer?
+	Timer* setTimer(float seconds, bool callback); //is it ok for time to be float?
 	std::weak_ptr<Node> node;
 private:
 	void stop();
