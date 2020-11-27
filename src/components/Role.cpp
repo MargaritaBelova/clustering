@@ -10,6 +10,7 @@
 #include <iostream>	// del later;
 
 #include "Node.h"
+#include "../network/RoleTimer.h"
 
 Role::Role(std::weak_ptr<Node> node_): node(node_){
 	std::unique_ptr<Role> uptr_from_this(this);
@@ -18,7 +19,7 @@ Role::Role(std::weak_ptr<Node> node_): node(node_){
 	// add logger
 }
 
-Timer* Role::setTimer(float seconds, bool callback){
+RoleTimer* Role::setTimer(float seconds){
 	//set timer for node.network here;
 }
 

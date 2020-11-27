@@ -7,7 +7,9 @@
 
 #include "Acceptor.h"
 
-#include <cassert> // del later
+// del those later
+#include <cassert>
+#include <iostream>
 
 #include "../messages/Accepted.h"
 #include "../messages/Accepting.h"
@@ -32,7 +34,7 @@ Role_id Acceptor::getRoleName() const {
 }
 
 void Acceptor::callback(){
-	std::cout << "Acceptor callback: it shouldn't be called\n"; 	//del later
+	std::cout << "Acceptor callback: it shouldn't be called\n";
 }
 
 //check for bad keys and initial values; check for nullptr which created after construction
@@ -41,7 +43,6 @@ void Acceptor::doAccept(std::string sender, std::shared_ptr<Ballot> ballot_num_,
 
 	assert(ballot_num); // del later;
 	std::cout << "Acceptror::doAccept: ballot_num != nullptr\n";
-	// check it for variable names
 	if (ballot_num_->n >= ballot_num->n){
 			ballot_num = ballot_num_;
 			auto const& it = accepted_proposals.find(slot);
@@ -56,22 +57,19 @@ void Acceptor::doAccept(std::string sender, std::shared_ptr<Ballot> ballot_num_,
 	}
 	//del later
 	assert(ballot_num->leader != "empty");
-	// del later;
 	std::cout << "doAccept: " << sender << " " << ballot_num->n << std::endl;
 
 	auto accepted_msg = std::make_unique<Accepted>(slot, ballot_num);
 	node.lock()->send(std::move(sender), std::move(accepted_msg));
-	//auto destination_ptr = std::make_unique<std::string>(sender);
-	//node.lock()->send(std::move(destination_ptr), std::move(accepted_msg)); // move(uptr) because node and acceptor are on the same local node;
 }
 
 // not finished yet!
 void Acceptor::doPrepare(std::string sender, std::shared_ptr<Ballot> ballot_num_){
-	// add check for nullptr in cmp everywhere!
+	// check for nullptr
 	if (ballot_num_->n > ballot_num->n){ // is it safe for 0 ballot_num or should be >=?
 		ballot_num = ballot_num_;
 		auto accepting_msg = std::make_unique<Accepting>(sender);
-		node.lock()->send(node.lock()->getAddress(), std::move(accepting_msg)); // может, полностью расписать? или std::move тоже будет?
+		node.lock()->send(node.lock()->getAddress(), std::move(accepting_msg));
 	}
 	// оно че серьезно весь accepted_proposal каждый раз будет пересылать?!
 	// complete Promise() message later

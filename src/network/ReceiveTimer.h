@@ -18,7 +18,7 @@ class Node;
 class ReceiveTimer : public Timer {
 public:
 	// сделать dest_address_ без ссылки? хотя потом все равно копируется в конструкторе
-	ReceiveTimer(float expires_, std::string& dest_address_, Node* receiver_, std::unique_ptr<Message> message_);
+	ReceiveTimer(float expires_, const std::string& dest_address_, Node* receiver_, std::unique_ptr<Message> message_);
 	void callback();
 private:
 	Node* const receiver;

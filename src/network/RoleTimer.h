@@ -14,7 +14,7 @@ class Role;
 
 class RoleTimer : public Timer {
 public:
-	RoleTimer(float expires_, std::string& address_, Role* creator_);
+	RoleTimer(float expires_, const std::string& address_, Role* creator_);
 	void callback();
 	void cancel();
 private:

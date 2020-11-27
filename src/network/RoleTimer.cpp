@@ -9,7 +9,7 @@
 
 #include "../components/Role.h"
 
-RoleTimer::RoleTimer(float expires_, std::string& address_, Role* creator_) :
+RoleTimer::RoleTimer(float expires_, const std::string& address_, Role* creator_) :
 	Timer(expires_, address_), creator(creator_) {
 }
 

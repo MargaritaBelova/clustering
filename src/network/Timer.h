@@ -14,7 +14,7 @@
 // но тогда вообще везде надо сделать virtual - в классе Role, например
 class Timer {
 public:
-	Timer(float expires_, std::string& address_);
+	Timer(float expires_, const std::string& address_);
 	virtual ~Timer() = 0;
 	virtual void callback() = 0;
 	void cancel();

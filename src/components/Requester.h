@@ -15,45 +15,33 @@
 #include <memory>
 #include <string>
 
+#include "../Network/RoleTimer"
+
 
 class Requester : public Role {
 public:
 	// дописать конструктор
 	Requester(std::weak_ptr<Node> node_, const unsigned long int n_);
-	~Requester(); //del later
-	Role_id getRoleName() const; 	// rewrite to static?
+	~Requester();
+	Role_id getRoleName() const;
 
 	void callback();
 	void start();
 	void doInvoked(const std::string sender, const unsigned long client_id, const long output);
 
 private:
-	static unsigned long client_ids; // 100_000?
+	static unsigned long client_ids;
 	unsigned long client_id;
 	const unsigned long int n;
+	RoleTimer invoke_timer;
+
+	const float kInvokeRetransmit = 0.5;
 
 };
 
 /*
-class Requester(Role):
-    client_ids = itertools.count(start=100000)
-
-    def __init__(self, node, n, callback):
-        super(Requester, self).__init__(node)
-        self.client_id = self.client_ids.next()
-        self.n = n
-        self.output = None
-        self.callback = callback
-
-
-
-    def do_Invoked(self, sender, client_id, output):
-        if client_id != self.client_id:
-            return
-        self.logger.debug("received output %r" % (output,))
-        self.invoke_timer.cancel()
-        self.callback(output)
-        self.stop()
+ *
+ в первую очередь, дописать output и callback в конструктор
 
 */
 #endif /* COMPONENTS_REQUESTER_H_ */

@@ -11,10 +11,7 @@
 #include <memory>
 #include <iostream> //del later
 
-#include "../network/Timer.h"	// rewrite later to pointer?
-
-
-
+class RoleTimer;
 class Node;
 
 enum Role_id{
@@ -37,7 +34,7 @@ public:
 	virtual void callback() = 0;
 
 	// поменять тип на Role Timer?
-	Timer* setTimer(float seconds, bool callback); //is it ok for time to be float?
+	RoleTimer* setTimer(float seconds); //is it ok for time to be float?
 	std::weak_ptr<Node> node;
 private:
 	void stop();

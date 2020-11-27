@@ -16,6 +16,7 @@ class Proposal;
 class Ballot;
 
 struct Accept : public Message{
+	// потом убрать указатели
 	Accept(const unsigned long slot_, std::shared_ptr<Ballot> ballot_num_, const std::shared_ptr<Proposal> proposal_);
 	Message_id getMsgID() const;
 

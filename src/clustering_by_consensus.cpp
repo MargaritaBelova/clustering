@@ -25,55 +25,28 @@
 
 using namespace std;
 
+
 //class Role;
 class Message;
-
-class Pointee{
-public:
-	Pointee(){
-		cout << "Pointee created\n";
-	}
-};
-
-class Container{
-public:
-	Container(){
-		auto ballot_num = std::make_shared<Ballot>(0, "empty"); // change empty later;
-		std::cout << "Acceptor created\n";
-	}
-
-};
 
 
 int main() {
 	Network network(11.11);
 
 	shared_ptr<Node> sp1 = network.newNode("node1");
-	//shared_ptr<Node> sp2 = make_shared<Node>(network, "address12");
+	shared_ptr<Node> sp2 = network.newNode("node2");
+
 
 	weak_ptr<Node> wp1 = sp1;
 	//weak_ptr<Node> wp2 = sp2;
 	Acceptor* acc1 = new Acceptor(wp1);
-	//Acceptor* acc2 = new Acceptor(wp1);
+	cout << "in acc1: " << acc1->node.lock().get() << endl;
+	auto proposal = make_shared<Proposal>("caller", 0, 10);
+	auto bal1 = make_shared<Ballot>(1, "leader");
+	const int slot = 0;
+	acc1->doAccept("node1", bal1, slot, proposal);
 
-	//auto proposal = make_shared<Proposal>("caller", 0, 10);
-	//acc1->doAccept("sender", bal0, 0, proposal);
-
-	//auto bal1 = make_shared<Ballot>(1, "leader");
-	//acc1->doPrepare("sender", bal1);
-
-	Requester* requester = new Requester(wp1, 11);
-	//Requester* requester2 = new Requester(wp1, 111);
-	//void (Role::*fprole)() = &Role::callback;
-	//(requester->*fprole)();
-
-	string address = "node1";
-	network.setRoleTimer(address, 5, acc1);
-
-	auto bal0 = make_shared<Ballot>(0, "leader");
-	std::unique_ptr<Message> prepare = make_unique<Prepare>(bal0);
-	network.setReceiveTimer(address, 15, sp1.get(), std::move(prepare));
-
+	//Requester* requester = new Requester(wp1, 11);
 	network.run();
 	network.stop();
 	return 0;
